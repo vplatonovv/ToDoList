@@ -24,7 +24,8 @@ class ToDoListViewController: UITableViewController {
     
     private func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cell)
-        view.backgroundColor = .white
+        tableView.rowHeight = 80
+        view.backgroundColor = .systemGray5
         setupNavigationBar()
     }
     
