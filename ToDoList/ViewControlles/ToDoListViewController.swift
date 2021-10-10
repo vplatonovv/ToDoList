@@ -78,6 +78,14 @@ extension ToDoListViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let newTaskVc = NewTaskViewController()
+        let task = tasks[indexPath.row]
+        newTaskVc.isEdit = true
+        newTaskVc.task = task
+        newTaskVc.modalPresentationStyle = .fullScreen
+        newTaskVc.titleTextField.text = task.title
+        newTaskVc.noteTextView.text = task.note
+        navigationController?.present(newTaskVc, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

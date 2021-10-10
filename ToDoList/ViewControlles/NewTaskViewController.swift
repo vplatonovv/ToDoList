@@ -9,6 +9,9 @@ import UIKit
 
 class NewTaskViewController: UIViewController {
     
+    var isEdit = false
+    var task: Task? = nil
+    
     var titleTextField: UITextField = {
         let textFiled = UITextField()
         textFiled.borderStyle = .roundedRect
@@ -90,9 +93,15 @@ class NewTaskViewController: UIViewController {
     @objc private func save() {
         guard let title = titleTextField.text else { return }
         guard let note = noteTextView.text else { return }
-        StorageManager.shared.save(title: title, note: note) { task in
-            let toDoListVc = ToDoListViewController()
-            toDoListVc.tasks.append(task)
+        let toDoListVc = ToDoListViewController()
+        
+        if isEdit {
+            StorageManager.shared.edit(task: task ?? Task(), newTitle: title, newNote: note)
+            isEdit = false
+        } else {
+            StorageManager.shared.save(title: title, note: note) { task in
+                toDoListVc.tasks.append(task)
+            }
         }
         dismiss(animated: true, completion: nil)
     }
