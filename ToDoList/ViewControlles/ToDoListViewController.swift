@@ -25,7 +25,7 @@ class ToDoListViewController: UITableViewController {
     private func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cell)
         tableView.rowHeight = 80
-        view.backgroundColor = .systemGray5
+        view.backgroundColor = .systemGray6
         setupNavigationBar()
     }
     
@@ -45,7 +45,7 @@ class ToDoListViewController: UITableViewController {
     }
     
     private func fetchData() {
-        StorageManager.shared.fetchData { result in
+        StorageManager.shared.fetchData { [unowned self] result in
             switch result {
             case .success(let tasks):
                 self.tasks = tasks
