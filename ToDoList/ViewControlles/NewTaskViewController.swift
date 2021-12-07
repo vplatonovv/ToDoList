@@ -15,7 +15,7 @@ class NewTaskViewController: UIViewController {
     var titleTextField: UITextField = {
         let textFiled = UITextField()
         textFiled.borderStyle = .roundedRect
-        textFiled.placeholder = "Call the task"
+        textFiled.placeholder = "Название задачи"
         textFiled.font = UIFont.boldSystemFont(ofSize: 20)
         return textFiled
     }()
@@ -23,7 +23,7 @@ class NewTaskViewController: UIViewController {
     var noteTextView: UITextView = {
         let textView = UITextView()
         textView.layer.cornerRadius = 10
-        textView.text = "Note..."
+        textView.text = "Заметка"
         textView.font = UIFont.boldSystemFont(ofSize: 18)
         return textView
     }()
@@ -31,7 +31,7 @@ class NewTaskViewController: UIViewController {
     private var saveButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .systemBlue
-        button.setTitle("Save", for: .normal)
+        button.setTitle("Сохранить", for: .normal)
         button.layer.cornerRadius = 10
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.addTarget(self, action: #selector(save), for: .touchUpInside)
@@ -41,7 +41,7 @@ class NewTaskViewController: UIViewController {
     private var cancelButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .systemRed
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle("Отмена", for: .normal)
         button.layer.cornerRadius = 10
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.addTarget(self, action: #selector(cancel), for: .touchUpInside)
@@ -100,7 +100,7 @@ class NewTaskViewController: UIViewController {
     
     @objc private func save() {
         if titleTextField.text == "" {
-            let alert = UIAlertController(title: "Title is empty", message: "Please, add name for your task!", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Загаловок пустой", message: "Пожалуйста, введите название задачи!", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "Ok", style: .default)
             alert.addAction(okAction)
             present(alert, animated: true)
@@ -115,8 +115,8 @@ class NewTaskViewController: UIViewController {
             StorageManager.shared.edit(task: task ?? Task(), newTitle: title, newNote: note)
             isEdit = false
         } else {
-            StorageManager.shared.save(title: title, note: note) { task in
-                toDoListVc.tasks.append(task)
+            StorageManager.shared.save(title: title, note: note, done: false) { task in
+                toDoListVc.currentTasks.append(task)
             }
         }
         dismiss(animated: true, completion: nil)
