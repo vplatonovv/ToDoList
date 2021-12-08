@@ -50,12 +50,32 @@ class NewTaskViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
-        setupConstrains()
         titleTextField.delegate = self
         noteTextView.delegate = self
         view.backgroundColor = .systemGray5
+        setupViews()
+        setupConstrains()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTextView(parametr:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTextView(parametr:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
+    @objc func updateTextView (parametr: Notification) {
+        let userInfo = parametr.userInfo
+        
+        let getKeyboardRect = (userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardFrame = self.view.convert(getKeyboardRect, to: view.window)
+        
+        if parametr.name == UIResponder.keyboardWillHideNotification {
+            noteTextView.contentInset = UIEdgeInsets.zero
+        } else {
+            noteTextView.contentInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: keyboardFrame.height / 7, right: 0.0)
+            noteTextView.scrollIndicatorInsets = noteTextView.contentInset
+        }
+        noteTextView.scrollRangeToVisible(noteTextView.selectedRange)
+    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
@@ -93,6 +113,8 @@ class NewTaskViewController: UIViewController {
             cancelButton.trailingAnchor.constraint(equalTo: titleTextField.trailingAnchor)
         ])
     }
+    
+    
     
     @objc private func cancel() {
         dismiss(animated: true, completion: nil)
